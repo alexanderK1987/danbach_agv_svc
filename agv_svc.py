@@ -3,7 +3,7 @@ import sys
 import time
 from pymodbus.client.sync import ModbusTcpClient as MbClient
 
-class self.):
+class Danbach_AGV():
     
     def __init__(self, ip, port=502, timeout=5e-3, lwheel_scale=1.0, rwheel_scale=1.0):
         self.WHEEL_DIST = 0.393  # metre
