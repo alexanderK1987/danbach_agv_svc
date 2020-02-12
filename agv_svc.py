@@ -11,7 +11,7 @@ DEFAULT_SPEED = 600
 
 class Danbach_AGV():
     
-    def __init__(self, ip='192.168.10.30', port=502, timeout=5e-3, lwheel_scale=1.0, rwheel_scale=1.0):
+    def __init__(self, ip='192.168.10.30', port=502, timeout=1e-2, lwheel_scale=1.0, rwheel_scale=1.0):
         self.client = MbClient(ip, port=port, timeout=timeout)
         self.lwheel_scale = lwheel_scale
         self.rwheel_scale = rwheel_scale
