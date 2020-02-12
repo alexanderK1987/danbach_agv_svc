@@ -7,7 +7,7 @@ WHEEL_DIST = 0.393  # metre
 WHEEL_WIDTH = 0.037 # metre
 CMD_PERIOD = 0.2    # seconds
 WAIT_PERIOD = 1e-3
-DEFAULT_SPEED = 800
+DEFAULT_SPEED = 600
 
 class Danbach_AGV():
     
@@ -65,7 +65,7 @@ class Danbach_AGV():
         t0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
-            if abs(l0-l) >= dist or abs(r0-r) >= dist:
+            if abs(l0-l) >= dist and abs(r0-r) >= dist:
                 break
 
             if time.time()-t0 > CMD_PERIOD:
@@ -83,7 +83,7 @@ class Danbach_AGV():
         t0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
-            if abs(l0-l) + abs(r0-r) >= dist:
+            if abs(l0-l) >= dist and abs(r0-r) >= dist:
                 break
 
             if time.time()-t0 > CMD_PERIOD:
