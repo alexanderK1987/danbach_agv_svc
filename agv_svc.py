@@ -53,7 +53,7 @@ class Danbach_AGV():
 
             if time.time()-t0 > CMD_PERIOD:
                 t0 = time.time()
-                self.__set_wheel__(speed, speed)
+                self.__set_wheel__(-speed, -speed)
 
         self.__set_wheel__(0, 0)
 
