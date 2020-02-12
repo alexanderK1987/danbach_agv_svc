@@ -100,9 +100,14 @@ class Danbach_AGV():
         pass
 
     def __get_wheel_odo__(self):
-        rq = self.client.read_holding_registers(0x41E,4,unit=1)
-        L_WHEEL = rq.registers[0]*0x00010000 + rq.registers[1]
-        R_WHEEL = rq.registers[2]*0x00010000 + rq.registers[3]
+        while True:
+            try:
+                rq = self.client.read_holding_registers(0x41E,4,unit=1)
+                L_WHEEL = rq.registers[0]*0x00010000 + rq.registers[1]
+                R_WHEEL = rq.registers[2]*0x00010000 + rq.registers[3]
+            except:
+                continue
+            break
         # 2's complement on int_32
         L_WHEEL = L_WHEEL - 0x100000000 if (L_WHEEL & 0x80000000) else L_WHEEL
         R_WHEEL = R_WHEEL - 0x100000000 if (R_WHEEL & 0x80000000) else R_WHEEL
