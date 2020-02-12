@@ -61,11 +61,10 @@ class Danbach_AGV():
         if radian == 0 or speed == 0:
             return
         l0, r0 = self.__get_wheel_odo__()
-        dist = abs(WHEEL_DIST/2.0 * radian)
         t0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
-            if abs(l0-l) >= dist and abs(r0-r) >= dist:
+            if abs(abs(l-l0)-abs(r-r0))/L >= abs(radian):
                 break
 
             if time.time()-t0 > CMD_PERIOD:
@@ -83,7 +82,7 @@ class Danbach_AGV():
         t0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
-            if abs(l0-l) >= dist or abs(r0-r) >= dist:
+            if abs(abs(l-l0)-abs(r-r0))/L >= abs(radian):
                 break
 
             if time.time()-t0 > CMD_PERIOD:
