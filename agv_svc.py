@@ -83,7 +83,7 @@ class Danbach_AGV():
         t0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
-            if abs(l0-l) >= dist and abs(r0-r) >= dist:
+            if abs(l0-l) >= dist or abs(r0-r) >= dist:
                 break
 
             if time.time()-t0 > CMD_PERIOD:
