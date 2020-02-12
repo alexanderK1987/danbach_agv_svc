@@ -3,15 +3,15 @@ import sys
 import time
 from pymodbus.client.sync import ModbusTcpClient as MbClient
 
+WHEEL_DIST = 0.393  # metre
+WHEEL_WIDTH = 0.037 # metre
+CMD_PERIOD = 0.2    # seconds
+WAIT_PERIOD = 1e-3
+DEFAULT_SPEED = 800
+
 class Danbach_AGV():
     
     def __init__(self, ip, port=502, timeout=5e-3, lwheel_scale=1.0, rwheel_scale=1.0):
-        self.WHEEL_DIST = 0.393  # metre
-        self.WHEEL_WIDTH = 0.037 # metre
-        self.CMD_PERIOD = 0.2    # seconds
-        self.WAIT_PERIOD = 1e-3
-        self.DEFAULT_SPEED = 800
-
         self.client = MbClient(ip, port=port, timeout=timeout)
         self.lwheel_scale = lwheel_scale
         self.rwheel_scale = rwheel_scale
@@ -26,67 +26,67 @@ class Danbach_AGV():
     def disconnect(self):
         self.client.disconnect()
     
-    def forward(self, distance, speed=self.DEFAULT_SPEED):
+    def forward(self, distance, speed=DEFAULT_SPEED):
         if distance == 0 or speed == 0:
             return
         l0, r0 = self.__get_wheel_odo__()
-        t_0 = time.time()-self.CMD_PERIOD
+        t_0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
             if l >= l0+distance and r >= r0+distance:
                 break
-            if time.time()-t0 > self.CMD_PERIOD:
+            if time.time()-t0 > CMD_PERIOD:
                 t0 = time.time()
                 self.__set_wheel__(speed, speed)
 
         self.__set_wheel__(0, 0)
 
-    def back(self, distance, speed=self.DEFAULT_SPEED):
+    def back(self, distance, speed=DEFAULT_SPEED):
         if distance == 0 or speed == 0:
             return
         l0, r0 = self.__get_wheel_odo__()
-        t_0 = time.time()-self.CMD_PERIOD
+        t_0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
             if l < l0-distance and r < r0-distance:
                 break
 
-            if time.time()-t0 > self.CMD_PERIOD:
+            if time.time()-t0 > CMD_PERIOD:
                 t0 = time.time()
                 self.__set_wheel__(speed, speed)
 
         self.__set_wheel__(0, 0)
 
-    def pivot(self, radian, speed=self.DEFAULT_SPEED):
+    def pivot(self, radian, speed=DEFAULT_SPEED):
         if radian == 0 or speed == 0:
             return
         l0, r0 = self.__get_wheel_odo__()
-        dist = self.WHEEL_DIST/2.0 * radian
-        t_0 = time.time()-self.CMD_PERIOD
+        dist = WHEEL_DIST/2.0 * radian
+        t_0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
             if abs(l0-l) >= dist or abs(r0-r) >= dist:
                 break
 
-            if time.time()-t0 > self.CMD_PERIOD:
+            if time.time()-t0 > CMD_PERIOD:
                 t0 = time.time()
                 if radian > 0:
                     self.__set_wheel__(-speed//2, speed//2)
                 else:
                     self.__set_wheel__(speed//2, -speed//2)
 
-    def steer(self, radian, direction=1, speed=self.DEFAULT_SPEED):
+    def steer(self, radian, direction=1, speed=DEFAULT_SPEED):
         if radian == 0 or speed == 0:
             return
         l0, r0 = self.__get_wheel_odo__()
-        dist = self.WHEEL_DIST * radian
-        t_0 = time.time()-self.CMD_PERIOD
+        dist = WHEEL_DIST * radian
+        t_0 = time.time()-CMD_PERIOD
         while True:
             l, r = self.__get_wheel_odo__()
             if abs(l0-l) + abs(r0-r) >= dist:
                 break
 
-            if time.time()-t0 > self.CMD_PERIOD:
+            if time.time()-t0 > CMD_PERIOD:
                 t0 = time.time()
                 if radian > 0 and direction == 1:
                     self.__set_wheel__(0, speed)
@@ -97,7 +97,7 @@ class Danbach_AGV():
                 else:
                     self.__set_wheel__(0, -speed)
 
-    def turn(self, radian, inner_radius, direction=1, speed=self.DEFAULT_SPEED):
+    def turn(self, radian, inner_radius, direction=1, speed=DEFAULT_SPEED):
         pass
 
     def __get_wheel_odo__(self):
