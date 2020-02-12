@@ -112,11 +112,11 @@ class Danbach_AGV():
 
     def __set_wheel__(self, lspeed, rspeed):
         if lspeed == 0 and rspeed == 0:
-            rq = client.write_registers(0x1620, [0x0002, 0, 0, 0, 0], unit=0x01)
+            rq = self.client.write_registers(0x1620, [0x0002, 0, 0, 0, 0], unit=0x01)
 
         lspeed = lspeed + 0x10000 if lspeed < 0 else lspeed
         rspeed = rspeed + 0x10000 if rspeed < 0 else rspeed
-        rq = client.write_registers(0x1620, [0x0001, lspeed, rspeed, 0, 0], unit=0x01)
+        rq = self.client.write_registers(0x1620, [0x0001, lspeed, rspeed, 0, 0], unit=0x01)
 
 
 if __name__ == '__main__':
