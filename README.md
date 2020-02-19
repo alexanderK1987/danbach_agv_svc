@@ -7,7 +7,10 @@ This API provode a set of straight-forward control commands to control the AGV b
 
 ## Initialization
 The following command create an AGV client to the modbus host.
-`d = Danbach_AGV(lwheel_scale, rwheel_scale, ip, port, timeout)`
+```python
+d = Danbach_AGV(lwheel_scale, rwheel_scale, ip, port, timeout)
+```
+
 ### parameters
  - `lwheel_scale`: the odometer scale for left wheel, ticks/metre (default = 1.0)
  - `rwheel_scale`: the odometer scale for right wheel, ticks/metre (default = 1.0)
