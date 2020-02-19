@@ -18,7 +18,9 @@ The following command create an AGV client to the modbus host.
 After the AGV client is successful created, use the following commands to establish/drop the connection.
 ```python
 d.connect()
-d.disconnect()```
+# ... other stuff
+d.disconnect()
+```
 
 ## Forward
 Tell the AGV to move forward a constant distance (unit = metre) with/without a default/assigned speed.
