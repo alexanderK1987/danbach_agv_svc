@@ -16,7 +16,7 @@ d = Danbach_AGV(lwheel_scale, rwheel_scale, ip, port, timeout)
  - `rwheel_scale`: the odometer scale for right wheel, ticks/metre (default = 1.0)
  - `ip`: ip address to the modbus host (default = '192.168.10.30')
  - `port`: port to the modbus host (default = 502)
- - `timeout`: timeout for the modbus TCP protocol (default = 7e-3)
+ - `timeout`: timeout for the modbus TCP protocol (default = 5e-2)
 
 After the AGV client is successful created, use the following commands to establish/drop the connection.
 ```python
