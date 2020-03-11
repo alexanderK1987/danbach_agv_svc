@@ -129,6 +129,30 @@ class Danbach_AGV():
 
         return L_WHEEL*1e-3*self.lwheel_scale, R_WHEEL*1e-3*self.rwheel_scale
 
+    def __get_wheel_odo_raw__(self):
+        while True:
+            try:
+                rq = self.client.read_holding_registers(0x41E,4,unit=1)
+                L_WHEEL = rq.registers[0]*0x00010000 + rq.registers[1]
+                R_WHEEL = rq.registers[2]*0x00010000 + rq.registers[3]
+            except:
+                continue
+            break
+        # 2's complement on int_32
+        L_WHEEL = L_WHEEL - 0x100000000 if (L_WHEEL & 0x80000000) else L_WHEEL
+        R_WHEEL = R_WHEEL - 0x100000000 if (R_WHEEL & 0x80000000) else R_WHEEL
+
+        return L_WHEEL, R_WHEEL
+
+    def __set_wheel__(self, lspeed, rspeed):
+        if lspeed == 0 and rspeed == 0:
+            rq = self.client.write_registers(0x1620, [0x0002, 0, 0, 0, 0], unit=0x01)
+
+        lspeed = lspeed + 0x10000 if lspeed < 0 else lspeed
+        rspeed = rspeed + 0x10000 if rspeed < 0 else rspeed
+        rq = self.client.write_registers(0x1620, [0x0001, lspeed, rspeed, 0, 0], unit=0x01)
+
+
     def __set_wheel__(self, lspeed, rspeed):
         if lspeed == 0 and rspeed == 0:
             rq = self.client.write_registers(0x1620, [0x0002, 0, 0, 0, 0], unit=0x01)
